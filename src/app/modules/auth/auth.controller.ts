@@ -7,9 +7,8 @@ import { AuthServices } from "./auth.service";
 
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("req auth", req.body);
     const loginInfo = await AuthServices.credentialsLogin(req.body);
-    console.log("req log", loginInfo);
+
     sendResponse(res, {
       success: true,
       statusCode: httpStatus.OK,
