@@ -1,12 +1,21 @@
 import { Router } from "express";
 import { UserControllers } from "./user.controller";
+import { validateRequest } from "../../middlewares/validateRequest";
+import { updateUserZodSchema } from "./userValidation";
+import { checkAuth } from "../../middlewares/checkAuth";
+import { Role } from "./user.interface";
 
 const router = Router();
 
 router.post("/register", UserControllers.createUser);
 
-router.get("/", UserControllers.getAllUsers);
+router.get("/all-users", UserControllers.getAllUsers);
 
-router.patch("/:id", UserControllers.updateUser);
+router.patch(
+  "/:id",
+  validateRequest(updateUserZodSchema),
+  checkAuth(...Object.values(Role)),
+  UserControllers.updateUser
+);
 
 export const UserRoutes = router;
