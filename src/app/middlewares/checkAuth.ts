@@ -4,7 +4,8 @@ import { envVars } from "../config/env";
 import AppError from "../errorHelpers/AppError";
 import { verifyToken } from "../utils/jwt";
 
-export const checkAuth = (...authRoles: string[]) =>
+export const checkAuth =
+  (...authRoles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const accessToken = req.headers.authorization;
