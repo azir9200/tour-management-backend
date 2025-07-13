@@ -8,7 +8,6 @@ import httpStatus from "http-status-codes";
 import { IUser } from "../user/user.interface";
 
 const credentialsLogin = async (payload: Partial<IUser>) => {
-  console.log("object credit", payload);
   const { email, password } = payload;
 
   const isUserExist = await User.findOne({ email });
@@ -29,12 +28,15 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
     userId: isUserExist._id,
     email: isUserExist.email,
     role: isUserExist.role,
+    password: isUserExist.password,
   };
+
   const accessToken = generateToken(
     jwtPayload,
     envVars.JWT_ACCESS_SECRET,
     envVars.JWT_ACCESS_EXPIRES
   );
+  
 
   return {
     accessToken,
