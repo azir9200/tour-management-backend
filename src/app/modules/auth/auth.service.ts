@@ -8,7 +8,10 @@ import { User } from "../user/user.model";
 import bcryptjs from "bcryptjs";
 import httpStatus from "http-status-codes";
 import { IUser } from "../user/user.interface";
-import { createNewAccessTokenWithRefreshToken, createUserTokens } from "../../utils/userTokens";
+import {
+  createNewAccessTokenWithRefreshToken,
+  createUserTokens,
+} from "../../utils/userTokens";
 import { JwtPayload } from "jsonwebtoken";
 
 const credentialsLogin = async (payload: Partial<IUser>) => {
@@ -34,13 +37,13 @@ const credentialsLogin = async (payload: Partial<IUser>) => {
   //   role: isUserExist.role,
   //   password: isUserExist.password,
   // };
-    const userTokens = createUserTokens(isUserExist)
- const { password: pass, ...rest } = isUserExist.toObject()
+  const userTokens = createUserTokens(isUserExist);
+  const { password: pass, ...rest } = isUserExist.toObject();
   return {
-        accessToken: userTokens.accessToken,
-        refreshToken: userTokens.refreshToken,
-        user: rest
-    }
+    accessToken: userTokens.accessToken,
+    refreshToken: userTokens.refreshToken,
+    user: rest,
+  };
 
   // const accessToken = generateToken(
   //   jwtPayload,

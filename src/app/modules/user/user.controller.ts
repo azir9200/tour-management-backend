@@ -7,6 +7,8 @@ import httpStatus from "http-status-codes";
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const user = await UserServices.createUser(req.body);
 
+  console.log("use contro", user);
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
