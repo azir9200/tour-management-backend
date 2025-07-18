@@ -14,8 +14,7 @@ import { envVars } from "../../config/env";
 const credentialsLogin = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const loginInfo = await AuthServices.credentialsLogin(req.body);
-
-    console.log("login info", loginInfo);
+    // console.log("login info", loginInfo);
 
     setAuthCookie(res, loginInfo);
 
