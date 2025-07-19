@@ -3,6 +3,7 @@ import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
 import { envVars } from "./app/config/env";
+import { seedSuperAdmin } from "./app/utils/seedSuperAdmin";
 
 let server: Server;
 
@@ -10,16 +11,20 @@ const startServer = async () => {
   try {
     await mongoose.connect(envVars.DB_URL);
 
-    console.log("connected to db");
-
     server = app.listen(envVars.PORT, () => {
       console.log(`Server is running on port ${envVars.PORT} `);
     });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     console.error("Failed to connect:", err.message);
   }
 };
-startServer();
+
+(async () => {
+  await startServer();
+  await seedSuperAdmin();
+})();
+// startServer();
 
 //sigterm error
 process.on("SIGINT", () => {
