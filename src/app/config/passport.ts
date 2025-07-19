@@ -24,6 +24,7 @@ passport.use(
     ) => {
       try {
         const email = profile.emails?.[0].value;
+        console.log(email);
         if (!email) {
           return done(null, false, { message: "No email found" });
         }
