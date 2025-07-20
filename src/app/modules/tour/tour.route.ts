@@ -1,34 +1,19 @@
-<<<<<<< HEAD
 import { Router } from "express";
 import { TourController } from "./tour.controller";
-// import { checkAuth } from "../../middlewares/checkAuth";
-// import { Role } from "../user/user.interface";
 
 const router = Router();
 
-
-router.post(
-  "/create-tour-type",
-  //   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
-  TourController.createTourType
-);
-
+//tour related
 router.post("/create", TourController.createTour);
-
 router.get("/", TourController.getAllTours);
-=======
-import express from "express";
-import { checkAuth } from "../../middlewares/checkAuth";
-import { Role } from "../user/user.interface";
-import { validateRequest } from "../../middlewares/validateRequest";
-import { TourController } from "./tour.controller";
+router.get("/:id", TourController.getTourById);
+router.patch("/:id", TourController.updateTour);
+router.delete("/id", TourController.deleteTour);
 
-const router = express.Router();
-router.post(
-  "/create",
-  //   checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
-  TourController.createTour
-);
+//tour type related route
+router.post("/create-tour-type", TourController.createTourType);
+router.get("/tour-types", TourController.getAllTourTypes);
+router.patch("/tour-types/:id", TourController.updateTourType);
+router.delete("/tour-types/:id", TourController.deleteTourType);
 
->>>>>>> passport
 export const TourRoutes = router;

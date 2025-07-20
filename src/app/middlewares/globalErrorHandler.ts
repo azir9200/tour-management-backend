@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import AppError from "../errorHelpers/AppError";
 import { envVars } from "../config/env";
 import { TErrorSources } from "../interfaces/error.types";
@@ -12,9 +13,13 @@ import { handlerValidationError } from "../helpers/handlerValidationError";
 export const globalErrorHandler = (
   err: any,
   req: Request,
-  res: Response
-  // next: NextFunction
+  res: Response,
+  next: NextFunction
 ) => {
+  if (envVars.NODE_ENV === "development") {
+    console.log(err);
+  }
+
   let errorSources: TErrorSources[] = [];
   let statusCode = 500;
   let message = "Something Went Wrong!!";
@@ -30,6 +35,7 @@ export const globalErrorHandler = (
     const simplifiedError = handleCastError(err);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
+    // Zod Error
   } else if (err.name == "ZodError") {
     const simplifiedError = handlerZodError(err);
     statusCode = simplifiedError.statusCode;
@@ -42,6 +48,8 @@ export const globalErrorHandler = (
     statusCode = simplifiedError.statusCode;
     errorSources = simplifiedError.errorSources as TErrorSources[];
     message = simplifiedError.message;
+
+    //App error
   } else if (err instanceof AppError) {
     statusCode = err.statusCode;
     message = err.message;
@@ -54,7 +62,7 @@ export const globalErrorHandler = (
     success: false,
     message,
     errorSources,
-    err,
+    err: envVars.NODE_ENV === "development" ? err : null,
     stack: envVars.NODE_ENV === "development" ? err.stack : null,
   });
 };
