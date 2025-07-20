@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { ITour, ITourType } from "./tour.interface";
 import { Tour, TourType } from "./tour.model";
+=======
+import { ITour } from "./tour.interface";
+import { Tour } from "./tour.model";
+>>>>>>> passport
 
 const createTour = async (payload: ITour) => {
   const existingTour = await Tour.findOne({ title: payload.title });
@@ -8,6 +13,7 @@ const createTour = async (payload: ITour) => {
   }
 
   const tour = await Tour.create(payload);
+<<<<<<< HEAD
   return tour;
 };
 
@@ -39,4 +45,11 @@ export const TourService = {
   createTour,
   createTourType,
   getAllTours,
+=======
+
+  return tour;
+};
+export const TourService = {
+  createTour,
+>>>>>>> passport
 };

@@ -45,3 +45,18 @@ export const TourController = {
   createTourType,
   getAllTours,
 };
+
+
+// const createTour = catchAsync(async (req: Request, res: Response) => {
+//   const result = await TourService.createTour(req.body);
+
+//   sendResponse(res, {
+//     statusCode: 201,
+//     success: true,
+//     message: "Tour created successfully",
+//     data: result,
+//   });
+// });
+// export const TourController = {
+//   createTour,
+// };

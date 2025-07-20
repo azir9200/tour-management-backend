@@ -14,7 +14,11 @@ const authProviderSchema = new Schema<IAuthProvider>(
 
 const userSchema = new Schema<IUser>(
   {
+<<<<<<< HEAD
     // _id: { type: String },
+=======
+    id: { type: String },
+>>>>>>> passport
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String },
