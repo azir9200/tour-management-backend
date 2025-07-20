@@ -11,6 +11,7 @@ export const handlerValidationError = (
 ): TGenericErrorResponse => {
   const errorSources: TErrorSources[] = [];
   const errors = Object.values(err.errors);
+  console.log("error n", errors);
 
   errors.forEach((errorObject: any) =>
     errorSources.push({
