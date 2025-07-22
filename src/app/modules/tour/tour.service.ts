@@ -1,3 +1,5 @@
+import { QueryBuilder } from "../../utils/QueryBuilder";
+import { tourSearchableFields } from "./tour.constant";
 import { ITour, ITourType } from "./tour.interface";
 import { Tour, TourType } from "./tour.model";
 
@@ -6,16 +8,32 @@ const createTour = async (payload: ITour) => {
   if (existingTour) {
     throw new Error("A tour with this title already exists.");
   }
-  console.log(payload);
-
   const tour = await Tour.create(payload);
 
   return tour;
 };
 // Get all Tours
-const getAllTours = async () => {
-  const tour = await Tour.find();
-  return tour;
+const getAllTours = async (query: Record<string, string>) => {
+  const queryBuilder = new QueryBuilder(Tour.find(), query);
+
+  const tours = await queryBuilder
+    .search(tourSearchableFields)
+    .filter()
+    .sort()
+    .fields()
+    .paginate();
+
+  // const meta = await queryBuilder.getMeta()
+
+  const [data, meta] = await Promise.all([
+    tours.build(),
+    queryBuilder.getMeta(),
+  ]);
+
+  return {
+    data,
+    meta,
+  };
 };
 // Update a Tour
 const updatedTour = async (id: string, payload: Partial<ITour>) => {
@@ -47,9 +65,31 @@ const createTourType = async (payload: ITourType) => {
 };
 
 // Get all Tours Types
+// const getAllTourTypes = async (query: Record<string, string>) => {
+//   const queryBuilder = new QueryBuilder(TourType.find(), query);
+
+//   const tourTypes = await queryBuilder
+//     .search(tourSearchableFields)
+//     .filter()
+//     .sort()
+//     .fields()
+//     .paginate();
+
+//   const [data, meta] = await Promise.all([
+//     tourTypes.build(),
+//     queryBuilder.getMeta(),
+//   ]);
+
+//   return {
+//     data,
+//     meta,
+//   };
+// };
+
 const getAllTourTypes = async () => {
-  return await TourType.find();
+    return await TourType.find();
 };
+
 // update all Tour types
 const updateTourType = async (id: string, payload: ITourType) => {
   const existingTourType = await TourType.findById(id);
