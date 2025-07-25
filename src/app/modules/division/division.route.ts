@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { DivisionController } from "./division.controller";
 import { validateRequest } from "../../middlewares/validateRequest";
 import {
@@ -7,13 +7,19 @@ import {
 } from "./division.validation";
 import { checkAuth } from "../../middlewares/checkAuth";
 import { Role } from "../user/user.interface";
+import { multerUpload } from "../../config/multer.config";
 
 const router = Router();
 
 router.post(
   "/create",
   checkAuth(Role.SUPER_ADMIN, Role.ADMIN),
+  multerUpload.single("file"),
   validateRequest(createDivisionSchema),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   DivisionController.createDivision
 );
 
