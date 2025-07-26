@@ -11,6 +11,16 @@ router.post("/login", AuthControllers.credentialsLogin);
 router.post("/refresh-token", AuthControllers.getNewAccessToken);
 router.post("/logout", AuthControllers.logout);
 
+// router.post("/change-password", checkAuth(...Object.values(Role)), AuthControllers.changePassword)
+
+router.post(
+  "/set-password",
+  checkAuth(...Object.values(Role)),
+  AuthControllers.setPassword
+);
+
+// router.post("/forgot-password", AuthControllers.forgotPassword)
+
 router.post(
   "/reset-password",
   checkAuth(...Object.values(Role)),
@@ -28,8 +38,12 @@ router.get(
   }
 );
 
+router.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: `${envVars.FRONTEND_URL}/login?error=There is some issues with your account. Please contact with out support team!`,
+  }),
+  AuthControllers.googleCallbackController
+);
 
-router.get("/google/callback", passport.authenticate("google", { failureRedirect: `${envVars.FRONTEND_URL}/login?error=There is some issues with your account. Please contact with out support team!` }), AuthControllers.googleCallbackController)
-
-
- export const AuthRoutes = router;
+export const AuthRoutes = router;
