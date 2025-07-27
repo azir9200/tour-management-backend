@@ -10,7 +10,6 @@ import { handlerZodError } from "../helpers/handlerZodError";
 import { handlerValidationError } from "../helpers/handlerValidationError";
 import { deleteImageFromCLoudinary } from "../config/cloudinary.config";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const globalErrorHandler = async (
   err: any,
   req: Request,
