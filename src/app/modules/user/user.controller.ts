@@ -3,6 +3,7 @@ import { UserServices } from "./user.service";
 import { catchAsync } from "../../utils/catchAsync";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status-codes";
+import { JwtPayload } from "jsonwebtoken";
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const user = await UserServices.createUser(req.body);
@@ -18,7 +19,10 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserServices.getAllUsers();
+  const query = req.query;
+  const result = await UserServices.getAllUsers(
+    query as Record<string, string>
+  );
 
   sendResponse(res, {
     success: true,
@@ -29,13 +33,40 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getSingleUser = catchAsync(async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const result = await UserServices.getSingleUser(id);
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: "User Retrieved Successfully",
+    data: result.data,
+  });
+});
+
+const getMe = catchAsync(async (req: Request, res: Response) => {
+  const decodedToken = req.user as JwtPayload;
+  const result = await UserServices.getMe(decodedToken.userId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.CREATED,
+    message: "Your profile Retrieved Successfully",
+    data: result.data,
+  });
+});
+
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const userId = req.params.id;
 
   const verifiedToken = req.user;
 
   const payload = req.body;
-  const user = await UserServices.updateUser(userId, payload, verifiedToken);
+  const user = await UserServices.updateUser(
+    userId,
+    payload,
+    verifiedToken as JwtPayload
+  );
 
   sendResponse(res, {
     success: true,
@@ -48,5 +79,7 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
 export const UserControllers = {
   createUser,
   getAllUsers,
+  getSingleUser,
+  getMe,
   updateUser,
 };
