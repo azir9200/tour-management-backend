@@ -23,6 +23,7 @@ router.get(
   checkAuth(...Object.values(Role)),
   UserControllers.getSingleUser
 );
+
 router.get("/me", checkAuth(...Object.values(Role)), UserControllers.getMe);
 
 router.patch(
