@@ -11,18 +11,19 @@ export const checkAuth =
   (...authRoles: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const accessToken = req.headers.authorization;
+      const accessToken = req.headers.authorization || req.cookies?.accessToken;
+      console.log("check auth", accessToken);
 
       if (!accessToken) {
         throw new AppError(403, "No Token Received");
       }
-      const verifiedToken = verifyToken(
+      const verifiedToken = (await verifyToken(
         accessToken,
         envVars.JWT_ACCESS_SECRET
-      ) as JwtPayload;
-
+      )) as JwtPayload;
+      console.log("very auth", verifiedToken);
       const isUserExist = await User.findOne({ email: verifiedToken.email });
-
+      console.log("check auth user", isUserExist);
       if (!isUserExist) {
         throw new AppError(httpStatus.BAD_REQUEST, "User does not exist");
       }

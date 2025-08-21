@@ -15,16 +15,17 @@ router.post(
 
 router.get(
   "/all-users",
-  checkAuth(Role.ADMIN, Role.SUPER_ADMIN),
+  checkAuth(Role.ADMIN, Role.SUPER_ADMIN, Role.USER),
   UserControllers.getAllUsers
 );
+
+router.get("/me", checkAuth(...Object.values(Role)), UserControllers.getMe);
+
 router.get(
   "/:id",
   checkAuth(...Object.values(Role)),
   UserControllers.getSingleUser
 );
-
-router.get("/me", checkAuth(...Object.values(Role)), UserControllers.getMe);
 
 router.patch(
   "/:id",
